@@ -548,8 +548,8 @@ void OnResize(int width, int height, bool contentLoaded, DirectXRenderStruct& re
 DirectX::XMMATRIX modelMatrix;
 DirectX::XMMATRIX viewMatrix;
 DirectX::XMMATRIX projectionMatrix;
-float angle = 0;
-void OnUpdate()
+double angle = 0;
+void OnUpdate(float dt)
 {
 	PIXScopedEvent(PIX_COLOR_INDEX(0), "Update");
 	//TODO: chck for cpu avx support
@@ -558,7 +558,7 @@ void OnUpdate()
 	
 	// Update the model matrix.
 	//float angle = static_cast<float>(e.TotalTime * 90.0);
-	++angle;
+	angle += dt * 150;
 	const DirectX::XMVECTOR rotationAxis = DirectX::XMVectorSet(1, 0, 0, 0);
 	modelMatrix = DirectX::XMMatrixRotationAxis(rotationAxis, DirectX::XMConvertToRadians(angle));
 	

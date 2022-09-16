@@ -118,7 +118,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 	LARGE_INTEGER lastCounter;
 	QueryPerformanceCounter(&lastCounter);
 	unsigned long long lastCycleCount = __rdtsc();
-
+	double sLastFrame = 0.0f;
 	while (appRunning)
 	{
 		PIXScopedEvent(PIX_COLOR_INDEX(2), "Frame");
@@ -168,7 +168,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 		XInputSetState(0, &vibration);
 
 		//DEL RENDERER
-		OnUpdate();
+		OnUpdate(sLastFrame);
 		OnRender(loadedAssets, renderer);
 
 		unsigned long long endCycleCount = __rdtsc();
@@ -177,6 +177,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 		long long counterElapsed = endCounter.QuadPart - lastCounter.QuadPart;
 		unsigned long long cyclesElapsed = endCycleCount - lastCycleCount;
 		float msPerFrame = 1000 * (float)counterElapsed / (float)performanceFrequency;
+		sLastFrame = (double)counterElapsed / (double)performanceFrequency;
 		float fps = (float)performanceFrequency / (float)counterElapsed;
 		float mCyclesPerFrame = ((float)cyclesElapsed / (1000 * 1000));
 #ifdef _DEBUG
