@@ -1123,7 +1123,8 @@ RenderLoadedAssets LoadAssets(ID3D12Device2* device, ID3D12CommandQueue* cQueue,
 				cList->ResourceBarrier(_countof(barriers), barriers);
 				cList->CopyResource(aliasResource, tResource);
 				//TODO: handle this alias back grouped with the next barriers grouped in just 1 list::resourceBarrier() call
-				cList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Aliasing(aliasResource, uavResource));
+				CD3DX12_RESOURCE_BARRIER tempAliasBarrier = CD3DX12_RESOURCE_BARRIER::Aliasing(aliasResource, uavResource);
+				cList->ResourceBarrier(1, &tempAliasBarrier);
 			}
 	
 			// Create a SRV that uses the format of the original texture.
@@ -1248,7 +1249,8 @@ RenderLoadedAssets LoadAssets(ID3D12Device2* device, ID3D12CommandQueue* cQueue,
 	ID3D12Resource* intermediateIndexBuffer;
 	UpdateBufferResource(device, cList, &indexBuffer, &intermediateIndexBuffer, indicies, _countof(indicies), sizeof(WORD), D3D12_RESOURCE_FLAG_NONE);
 	//TODO: If i don't transition it breaks on the renderer
-	cList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(tResource, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES));
+	CD3DX12_RESOURCE_BARRIER tempTransitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(tResource, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES);
+	cList->ResourceBarrier(1, &tempTransitionBarrier);
 	cList->Close();
 	ID3D12CommandList* ppCommandLists[] = {cList};
 	cQueue->ExecuteCommandLists(1 , ppCommandLists);
