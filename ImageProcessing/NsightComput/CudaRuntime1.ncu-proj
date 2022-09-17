@@ -1,0 +1,169 @@
+{
+    "extension": "ncu-proj",
+    "files": [
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "path": "BW4ch16x16y.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "is_open": true,
+            "path": "BW3ch16x16y.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "path": "BW3ch32x8y.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "path": "BW3ch256x1y.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "path": "BW4ch256x1y.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "path": "BW4ch32x8yBAD.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "path": "BW4ch32x8y.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "is_open": true,
+            "path": "BW3ch256x1y8k.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "path": "BW4ch256x1y8k.ncu-rep"
+        },
+        {
+            "group_id": "{81a143d9-3705-42b5-aa91-363c8a4a779f}",
+            "path": "BL3ch16x16y.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "is_open": true,
+            "path": "BW3ch256x1y8kCache.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "is_open": true,
+            "path": "BW3ch256x1y8k12rgb.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "path": "BW3ch256x1y12rgb.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "path": "BW3ch256x1y12rgbColStore.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "path": "BW3ch256x1y16rgb.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "is_open": true,
+            "path": "BW3ch32x8y8k.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "is_open": true,
+            "path": "BW3ch16x16y8k.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "is_open": true,
+            "path": "BW3ch256x1y8k12rgbCache.ncu-rep"
+        },
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "path": "BW3ch256x1y12rgbCache.ncu-rep"
+        }
+    ],
+    "groups": [
+        {
+            "group_id": "{77eb92fe-4a16-4943-b546-6ce28627598d}",
+            "group_name": "B&W"
+        },
+        {
+            "group_id": "{81a143d9-3705-42b5-aa91-363c8a4a779f}",
+            "group_name": "BL"
+        }
+    ],
+    "launcher": {
+        "activity/interactiveprofile/cachecontrol": "Flush All",
+        "activity/interactiveprofile/clockcontrol": "Base",
+        "activity/interactiveprofile/disableprofilingstartstop": false,
+        "activity/interactiveprofile/enablecpustacksupport": true,
+        "activity/interactiveprofile/enablenvtxsupport": true,
+        "activity/interactiveprofile/enableprofilingfromstart": true,
+        "activity/interactiveprofile/importsource": false,
+        "activity/occupancycalculator/file": "",
+        "activity/profile/applyrules": true,
+        "activity/profile/appreplaybuffer": "File",
+        "activity/profile/appreplaymatch": "Grid",
+        "activity/profile/cachecontrol": "Flush All",
+        "activity/profile/checkexitcode": true,
+        "activity/profile/clockcontrol": "Base",
+        "activity/profile/devices": "",
+        "activity/profile/disableprofilingstartstop": false,
+        "activity/profile/enablecpustacksupport": false,
+        "activity/profile/enablenvtxsupport": false,
+        "activity/profile/enableprofilingfromstart": true,
+        "activity/profile/forceoverwrite": true,
+        "activity/profile/importsource": false,
+        "activity/profile/kernelid": "",
+        "activity/profile/kernelname": "",
+        "activity/profile/kernelnamebase": "Function",
+        "activity/profile/kill": false,
+        "activity/profile/launchcapturecount": "0",
+        "activity/profile/launchskipbeforematchcount": "0",
+        "activity/profile/launchskipcount": "0",
+        "activity/profile/metrics": "",
+        "activity/profile/nvtxincludeexcludeoptions": "",
+        "activity/profile/outputfile": "",
+        "activity/profile/rangereplayoptions": "",
+        "activity/profile/replaymode": "Kernel",
+        "activity/profile/samplingBufferSize": "33554432",
+        "activity/profile/samplingInterval": "5",
+        "activity/profile/samplingIntervalAuto": true,
+        "activity/profile/samplingMaxPasses": "5",
+        "activity/profile/targetprocesses": "Application Only",
+        "platform/linux (x86_64)/device": "",
+        "platform/linux/arguments": "",
+        "platform/linux/autoconnect": true,
+        "platform/linux/environment": "",
+        "platform/linux/executable": "",
+        "platform/linux/workingdir": "",
+        "platform/win32/arguments": "b&w 4kLandscape.jpg blacked.jpg",
+        "platform/win32/arguments/history": [
+            "b&w 4kLandscape.jpg blacked.jpg",
+            "b&w 8kLandscape.jpg blacked.jpg",
+            "bl 8kLandscape.jpg blured.jpg",
+            "b&w 8kLandscape.jpg blacked.png",
+            "b&w 4kLandscape.jpg blacked.png",
+            "b&w 8kLandscape.jpg backed.png",
+            "b&w 4kLandscape.jpg backed.png",
+            "bl 4kLandscape.jpg blured.jpg",
+            "bl 4kPNG.png blured.jpg"
+        ],
+        "platform/win32/autoconnect": true,
+        "platform/win32/environment": "",
+        "platform/win32/executable": "C:\\Users\\User\\Desktop\\CudaRuntime1\\CudaRuntimeProject\\CudaRuntime1\\x64\\Release\\CudaRuntime1.exe",
+        "platform/win32/executable/history": [
+            "C:\\Users\\User\\Desktop\\CudaRuntime1\\CudaRuntimeProject\\CudaRuntime1\\x64\\Release\\CudaRuntime1.exe"
+        ],
+        "platform/win32/workingdir": "C:\\Users\\User\\Desktop\\CudaRuntime1\\CudaRuntimeProject\\CudaRuntime1\\CudaRuntime1\\",
+        "platform/win32/workingdir/history": [
+            "C:\\Users\\User\\Desktop\\CudaRuntime1\\CudaRuntimeProject\\CudaRuntime1\\CudaRuntime1\\"
+        ],
+        "platform/windows/device": "localhost"
+    },
+    "uuid": "{2eda6412-24ac-4aa1-8767-aa0861016194}",
+    "version": "1.0"
+}
