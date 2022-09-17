@@ -36,7 +36,7 @@
 //		long long counts = second_count.QuadPart - first_count.QuadPart;
 //		double ms = 1000 * ((double)counts / (double)freq.QuadPart);
 //		printf("\n%f ms \n", ms);
-//		stbi_write_jpg(argv[2], width, height, gray_channels, gray_img, 100);
+//		stbi_write_jpg(argv[3], width, height, gray_channels, gray_img, 100);
 //		stbi_image_free(img);
 //		free(gray_img);
 //	}

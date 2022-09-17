@@ -574,6 +574,74 @@ __global__ void ChannelWeightedImageBlur4(const unsigned char* const colorPixels
 		//	cache[cacheIdx + cacheDimX * 2 - 1] * 0.01 + cache[cacheIdx + cacheDimX * 2] * 0.01 + cache[cacheIdx + cacheDimX * 2 + 1] * 0.01;
 	}
 }
+__global__ void ChannelWeightedImageBlur5(const unsigned char* const colorPixels, unsigned char* bluredPixels, int rowElements, int columnElements, float* kernel, const unsigned int kernelRadius)
+{
+	const int x = blockIdx.x * blockDim.x + threadIdx.x;
+	const int y = blockIdx.y * blockDim.y + threadIdx.y;
+	const int gidx = y * rowElements + x;
+	const int cacheX = threadIdx.x + kernelRadius;
+	const int cacheY = threadIdx.y + kernelRadius;
+	const int cacheDimX = (blockDim.x + kernelRadius * 2);
+	//const int cacheDimY = (blockDim.y + kernelRadius * 2);
+	const int cacheIdx = cacheY * cacheDimX + cacheX;
+	//extern __shared__ to allocate the shared memory size at lunch time with the parameters of grid and block sizes <<<grid size,block size,shared bytes>>> kernel(...)
+	extern __shared__ unsigned char cache[];
+	//TODO: Mirar de loadejar la data de forma diferent (amb menys ifs i tot coalesced com es pugi)
+	cache[cacheIdx] = colorPixels[gidx];
+	if (threadIdx.y == 0)
+	{
+		//if (blockIdx.y != 0)
+		for (int i = 1; i <= kernelRadius; ++i)
+			if ((gidx - rowElements * i) >= 0)
+				cache[cacheIdx - cacheDimX * i] = colorPixels[gidx - rowElements * i];
+			else
+				cache[cacheIdx - cacheDimX * i] = colorPixels[gidx];
+	}
+	else if (threadIdx.y == (blockDim.y - 1))
+	{
+		//if (blockIdx.y != 0)
+		for (int i = 1; i <= kernelRadius; ++i)
+			if ((gidx + rowElements * i) < (rowElements * columnElements))
+				cache[cacheIdx + cacheDimX * i] = colorPixels[gidx + rowElements * i];
+			else
+				cache[cacheIdx + cacheDimX * i] = colorPixels[gidx];
+	}
+
+	if (threadIdx.x == 0)
+	{
+		//if (blockIdx.x != 0)
+		for (int i = 1; i <= kernelRadius; ++i)
+			if ((gidx - i) >= 0)
+				cache[cacheIdx - i] = colorPixels[gidx - i];
+			else
+				cache[cacheIdx - i] = colorPixels[gidx];
+	}
+	else if (threadIdx.x == (blockDim.x - 1))
+	{
+		//if (blockIdx.x != 0)
+		for (int i = 1; i <= kernelRadius; ++i)
+			if ((gidx + i) < (rowElements * columnElements))
+				cache[cacheIdx + i] = colorPixels[gidx + i];
+			else
+				cache[cacheIdx + i] = colorPixels[gidx];
+	}
+	__syncthreads();
+	if (y < columnElements && x < rowElements)
+	{
+		const unsigned int kernelDiam = kernelRadius * 2 + 1;
+		const unsigned int kernelSize = kernelDiam * kernelDiam;
+		unsigned char result = 0;
+		for (unsigned int i = 0; i < kernelSize; ++i)
+			result += cache[cacheIdx + (-cacheDimX * (2 - i / kernelDiam)) - 2 + (i % kernelDiam)] * kernel[i];
+		bluredPixels[gidx] = result;
+
+		//bluredPixels[gidx] = cache[cacheIdx - cacheDimX * 2 - 1] * 0.01 + cache[cacheIdx - cacheDimX * 2] * 0.01 + cache[cacheIdx - cacheDimX * 2 + 1] * 0.01 +
+		//	cache[cacheIdx - cacheDimX - 2] * 0.01 + cache[cacheIdx - cacheDimX - 1] * 0.05 + cache[cacheIdx - cacheDimX] * 0.11 + cache[cacheIdx - cacheDimX + 1] * 0.05 + cache[cacheIdx - cacheDimX + 2] * 0.01 +
+		//	cache[cacheIdx - 2] * 0.01 + cache[cacheIdx - 1] * 0.11 + cache[cacheIdx] * 0.24 + cache[cacheIdx + 1] * 0.11 + cache[cacheIdx + 2] * 0.01 +
+		//	cache[cacheIdx + cacheDimX - 2] * 0.01 + cache[cacheIdx + cacheDimX - 1] * 0.05 + cache[cacheIdx + cacheDimX] * 0.11 + cache[cacheIdx + cacheDimX + 1] * 0.05 + cache[cacheIdx + cacheDimX + 2] * 0.01 +
+		//	cache[cacheIdx + cacheDimX * 2 - 1] * 0.01 + cache[cacheIdx + cacheDimX * 2] * 0.01 + cache[cacheIdx + cacheDimX * 2 + 1] * 0.01;
+	}
+}
 
 __global__ void ChannelUnweightedImageBlurQuad(const unsigned char* const colorPixels, unsigned char* bluredPixels, int rowElements, int columnElements, int quadDim)
 {
@@ -837,14 +905,26 @@ int main(int argc, char* argv[])
 				0.00f,  0.01f,  0.01f,  0.01f,  0.00f
 			};
 			//0.001f 0.224f 0.49f 0.001f 0.224f
+			 
+			//const unsigned int kernelRadius = 3;
+			//float h_kernel[] = {
+			//	//kernel used for gaussian blur
+			//	0.000f,  0.000f,  0.001f,  0.001f,  0.001f, 0.000f, 0.000f,
+			//	0.000f,  0.002f,  0.012f,  0.020f,  0.012f, 0.002f, 0.000f,
+			//	0.001f,  0.012f,  0.068f,  0.109f,  0.068f, 0.012f, 0.001f,
+			//	0.001f,  0.020f,  0.109f,  0.172f,  0.109f, 0.020f, 0.001f,
+			//	0.001f,  0.012f,  0.068f,  0.109f,  0.068f, 0.012f, 0.001f,
+			//	0.000f,  0.002f,  0.012f,  0.020f,  0.012f, 0.002f, 0.000f,
+			//	0.000f,  0.000f,  0.001f,  0.001f,  0.001f, 0.000f, 0.000f
+			//};
 			float* d_kernel;
 			cudaMalloc(&d_kernel, _countof(h_kernel) * sizeof(float));
 			cudaMemcpy(d_kernel, h_kernel, _countof(h_kernel) * sizeof(float), cudaMemcpyHostToDevice);
 			//We are assuming threads.x == treads.y !!!!
 			int sharedMemSize = (threads.x + kernelRadius) * (threads.y + kernelRadius);
-			ChannelWeightedImageBlur4 <<< blocks, threads, sharedMemSize >>> (d_sortedChannelsR, d_blurredChannelsR, width, height, d_kernel, kernelRadius);
-			ChannelWeightedImageBlur4 <<< blocks, threads, sharedMemSize >>> (d_sortedChannelsG, d_blurredChannelsG, width, height, d_kernel, kernelRadius);
-			ChannelWeightedImageBlur4 << < blocks, threads, sharedMemSize >> > (d_sortedChannelsB, d_blurredChannelsB, width, height, d_kernel, kernelRadius);
+			ChannelWeightedImageBlur5 <<< blocks, threads, sharedMemSize >>> (d_sortedChannelsR, d_blurredChannelsR, width, height, d_kernel, kernelRadius);
+			ChannelWeightedImageBlur5 <<< blocks, threads, sharedMemSize >>> (d_sortedChannelsG, d_blurredChannelsG, width, height, d_kernel, kernelRadius);
+			ChannelWeightedImageBlur5 << < blocks, threads, sharedMemSize >> > (d_sortedChannelsB, d_blurredChannelsB, width, height, d_kernel, kernelRadius);
 			ChannelsUniteIntoRGB << < transBlocks, 256 >> > (d_blurredChannelsR, d_blurredChannelsG, d_blurredChannelsB, (uchar3*)d_imgData, size);
 			//ChannelUnweightedImageBlurQuad <<< blocks, threads, sharedMemSize >>> (d_sortedChannels + size, d_blurredChannels + size, width, height, quadDim);
 			//ChannelUnweightedImageBlurQuad <<< blocks, threads, sharedMemSize >>> (d_sortedChannels + size * 2, d_blurredChannels + size * 2, width, height, quadDim);

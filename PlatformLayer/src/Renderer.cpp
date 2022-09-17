@@ -933,7 +933,7 @@ RenderLoadedAssets LoadAssets(ID3D12Device2* device, ID3D12CommandQueue* cQueue,
 {
 	void* textureFileBuffer = nullptr;
 	DWORD textureFileBufferSize;
-	const char* textureFilePath = "../assets/8kLandscape.jpg";
+	const char* textureFilePath = "../assets/Directx9.png";
 	HRESULT hr = ReadFileToBuffer(textureFilePath, &textureFileBuffer, &textureFileBufferSize);
 	assert(SUCCEEDED(hr));
 	TexMetadata tMetadata;
